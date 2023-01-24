@@ -1,6 +1,6 @@
-﻿using System;
+﻿
+using ClinicCentres.Core.DomainEntities.Entities;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ClinicCentres.Core.DomainEntities
 {
@@ -10,7 +10,8 @@ namespace ClinicCentres.Core.DomainEntities
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public decimal Price { get; set; }
-        public Category Category { get; set; }
+        public ICollection<Image> Images { get; set; }
+        public virtual Category Category { get; set; }
         public int CategoryId { get; set; }
     }
 }

@@ -13,7 +13,9 @@ namespace ClinicCentres.Core.DomainEntities
 
         }
 
-        public DbSet<Category> Category { get; private set; }
+        public DbSet<Category> Categories { get; private set; }
+        public DbSet<Post> Posts { get; private set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfig())
@@ -22,7 +24,8 @@ namespace ClinicCentres.Core.DomainEntities
                         .ApplyConfiguration(new LikeConfig())
                         .ApplyConfiguration(new ProductConfig())
                         .ApplyConfiguration(new CaseConfig())
-                        .ApplyConfiguration(new AppointmentConfig());
+                        .ApplyConfiguration(new AppointmentConfig())
+                        .ApplyConfiguration(new ImageConfig());
             base.OnModelCreating(modelBuilder);
         }
     }

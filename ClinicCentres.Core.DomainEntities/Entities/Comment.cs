@@ -12,6 +12,6 @@ namespace ClinicCentres.Core.DomainEntities
         public ICollection<Comment> Replies { get; set; }
         public ICollection<Like> Likes { get; set; }
         public int PostId { get; set; }
-        public Post Post { get; set; }
+        public virtual Post Post { get; set; }
     }
 }
