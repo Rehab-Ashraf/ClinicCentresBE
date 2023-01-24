@@ -83,8 +83,11 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
@@ -93,7 +96,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Comment", b =>
@@ -124,6 +127,38 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Entities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImageBytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Like", b =>
@@ -163,11 +198,14 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("PublishingTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Post");
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Product", b =>
@@ -231,6 +269,29 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Entities.Image", b =>
+                {
+                    b.HasOne("ClinicCentres.Core.DomainEntities.Category", "Category")
+                        .WithOne("Image")
+                        .HasForeignKey("ClinicCentres.Core.DomainEntities.Entities.Image", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicCentres.Core.DomainEntities.Post", "Post")
+                        .WithMany("Images")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("ClinicCentres.Core.DomainEntities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Like", b =>
                 {
                     b.HasOne("ClinicCentres.Core.DomainEntities.Comment", "Comment")
@@ -275,6 +336,8 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
 
             modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Category", b =>
                 {
+                    b.Navigation("Image");
+
                     b.Navigation("Posts");
 
                     b.Navigation("Products");
@@ -293,7 +356,14 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Images");
+
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("ClinicCentres.Core.DomainEntities.Product", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

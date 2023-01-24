@@ -14,6 +14,7 @@ namespace ClinicCentres.Core.DomainEntities
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.Property(p => p.Description).IsRequired().HasMaxLength(10000);
             builder.HasMany(p => p.Comments).WithOne(c => c.Post).HasForeignKey(c => c.PostId);
+            builder.HasOne(c => c.Category).WithMany(p => p.Posts).IsRequired();
         }
     }
 }
