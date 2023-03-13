@@ -1,11 +1,12 @@
-﻿using ClinicCentres.Core.DomainEntities.Entities;
+﻿using ClinicCentres.Core.DomainEntities;
+using ClinicCentres.Core.DomainEntities.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClinicCentres.Core.DomainEntities
+namespace ClinicCentres.Data.EF
 {
     internal class CategoryConfig : IEntityTypeConfiguration<Category>
     {

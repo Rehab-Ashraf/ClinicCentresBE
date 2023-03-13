@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClinicCentres.Core.DomainEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ClinicCentres.Core.DomainEntities.Context
+
+namespace ClinicCentres.Data.EF
 {
     internal class AppointmentConfig : IEntityTypeConfiguration<Appointment>
     {
@@ -18,6 +15,7 @@ namespace ClinicCentres.Core.DomainEntities.Context
             builder.Property(a => a.Time).IsRequired();
             builder.HasOne(a => a.Case).WithMany(c=>c.Appointments)
                     .HasForeignKey(a=>a.CaseId);
+            builder.ToTable("Appointments");
         }
     }
 }

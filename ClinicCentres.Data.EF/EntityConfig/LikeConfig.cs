@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClinicCentres.Core.DomainEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ClinicCentres.Core.DomainEntities
+
+namespace ClinicCentres.Data.EF
 {
     internal class LikeConfig : IEntityTypeConfiguration<Like>
     {
@@ -14,6 +13,7 @@ namespace ClinicCentres.Core.DomainEntities
             builder.Property(l => l.Id).ValueGeneratedOnAdd();
             builder.HasOne(l=>l.Comment).WithMany(c=>c.Likes).HasForeignKey(c => c.CommentId).IsRequired(false);
             builder.HasOne(l => l.Post).WithMany(c => c.Likes).IsRequired(false);
+            builder.ToTable("Likes");
         }
     }
 }

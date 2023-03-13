@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClinicCentres.Core.DomainEntities\ClinicCentres.Core.DomainEntities.csproj" />
+    <ProjectReference Include="..\ClinicCentres.Data.EF\ClinicCentres.Data.EF.csproj" />
   </ItemGroup>
 
 </Project>

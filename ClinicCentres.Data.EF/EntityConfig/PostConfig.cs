@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClinicCentres.Core.DomainEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ClinicCentres.Core.DomainEntities
+
+namespace ClinicCentres.Data.EF
 {
     internal class PostConfig : IEntityTypeConfiguration<Post>
     {
@@ -15,6 +14,7 @@ namespace ClinicCentres.Core.DomainEntities
             builder.Property(p => p.Description).IsRequired().HasMaxLength(10000);
             builder.HasMany(p => p.Comments).WithOne(c => c.Post).HasForeignKey(c => c.PostId);
             builder.HasOne(c => c.Category).WithMany(p => p.Posts).IsRequired();
+            builder.ToTable("Posts");
         }
     }
 }
