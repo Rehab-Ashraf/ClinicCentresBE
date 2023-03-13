@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace ClinicCentres.Core.DomainEntities.Context
+namespace ClinicCentres.Data.EF
 {
     public class ImageConfig : IEntityTypeConfiguration<Image>
     {
@@ -13,6 +13,7 @@ namespace ClinicCentres.Core.DomainEntities.Context
             builder.Property(i => i.ImageBytes).IsRequired();
             builder.HasOne(l => l.Post).WithMany(c => c.Images).HasForeignKey(c => c.PostId).IsRequired(false);
             builder.HasOne(l => l.Product).WithMany(c => c.Images).HasForeignKey(c => c.ProductId).IsRequired(false);
+            builder.ToTable("Images");
         }
     }
 }

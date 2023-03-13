@@ -1,13 +1,11 @@
-﻿using ClinicCentres.Core.DomainEntities.Context;
+﻿using ClinicCentres.Core.DomainEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace ClinicCentres.Core.DomainEntities
+namespace ClinicCentres.Data.EF
 {
     public class ClinicCentresDbContext:DbContext
     {
-        public IConfiguration Configuration { get; set; }
-
         public ClinicCentresDbContext(DbContextOptions<ClinicCentresDbContext> options) :base(options)
         {
 
@@ -15,7 +13,7 @@ namespace ClinicCentres.Core.DomainEntities
 
         public DbSet<Category> Categories { get; private set; }
         public DbSet<Post> Posts { get; private set; }
-
+        public DbSet<Branch> Branches { get; private set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfig())
@@ -25,7 +23,8 @@ namespace ClinicCentres.Core.DomainEntities
                         .ApplyConfiguration(new ProductConfig())
                         .ApplyConfiguration(new CaseConfig())
                         .ApplyConfiguration(new AppointmentConfig())
-                        .ApplyConfiguration(new ImageConfig());
+                        .ApplyConfiguration(new ImageConfig())
+                        .ApplyConfiguration(new BranchConfig());
             base.OnModelCreating(modelBuilder);
         }
     }

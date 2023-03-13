@@ -1,14 +1,28 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ClinicCentres.Core.DomainEntities.Migrations
+namespace ClinicCentres.Data.EF.Migrations
 {
-    public partial class config : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Case",
+                name: "Branches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Branches", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cases",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,7 +34,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Case", x => x.Id);
+                    table.PrimaryKey("PK_Cases", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,7 +59,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointment",
+                name: "Appointments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -57,11 +71,11 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointment_Case_CaseId",
+                        name: "FK_Appointments_Cases_CaseId",
                         column: x => x.CaseId,
-                        principalTable: "Case",
+                        principalTable: "Cases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -88,7 +102,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -100,9 +114,9 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_Categories_CategoryId",
+                        name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -110,7 +124,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comment",
+                name: "Comments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -122,15 +136,15 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comment_Comment_ParentId",
+                        name: "FK_Comments_Comments_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "Comment",
+                        principalTable: "Comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Comment_Posts_PostId",
+                        name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -138,7 +152,7 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -150,29 +164,29 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Image_Categories_CategoryId",
+                        name: "FK_Images_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Image_Posts_PostId",
+                        name: "FK_Images_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Image_Product_ProductId",
+                        name: "FK_Images_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Like",
+                name: "Likes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -182,15 +196,15 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Like", x => x.Id);
+                    table.PrimaryKey("PK_Likes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Like_Comment_CommentId",
+                        name: "FK_Likes_Comments_CommentId",
                         column: x => x.CommentId,
-                        principalTable: "Comment",
+                        principalTable: "Comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Like_Posts_PostId",
+                        name: "FK_Likes_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -198,8 +212,8 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_CaseId",
-                table: "Appointment",
+                name: "IX_Appointments_CaseId",
+                table: "Appointments",
                 column: "CaseId");
 
             migrationBuilder.CreateIndex(
@@ -208,39 +222,39 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ParentId",
-                table: "Comment",
+                name: "IX_Comments_ParentId",
+                table: "Comments",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_PostId",
-                table: "Comment",
+                name: "IX_Comments_PostId",
+                table: "Comments",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_CategoryId",
-                table: "Image",
+                name: "IX_Images_CategoryId",
+                table: "Images",
                 column: "CategoryId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_PostId",
-                table: "Image",
+                name: "IX_Images_PostId",
+                table: "Images",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_ProductId",
-                table: "Image",
+                name: "IX_Images_ProductId",
+                table: "Images",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Like_CommentId",
-                table: "Like",
+                name: "IX_Likes_CommentId",
+                table: "Likes",
                 column: "CommentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Like_PostId",
-                table: "Like",
+                name: "IX_Likes_PostId",
+                table: "Likes",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
@@ -249,30 +263,33 @@ namespace ClinicCentres.Core.DomainEntities.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_CategoryId",
-                table: "Product",
+                name: "IX_Products_CategoryId",
+                table: "Products",
                 column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointment");
+                name: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "Branches");
 
             migrationBuilder.DropTable(
-                name: "Like");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Case");
+                name: "Likes");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Cases");
 
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Posts");

@@ -1,9 +1,10 @@
 ﻿
 
+using ClinicCentres.Core.DomainEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClinicCentres.Core.DomainEntities.Context
+namespace ClinicCentres.Data.EF
 {
     internal class CaseConfig : IEntityTypeConfiguration<Case>
     {
@@ -15,6 +16,7 @@ namespace ClinicCentres.Core.DomainEntities.Context
             builder.Property(p => p.Phone).IsRequired().HasMaxLength(100);
             builder.Property(c => c.DateOfBirth).IsRequired();
             builder.Property(p => p.Email).HasMaxLength(100);
+            builder.ToTable("Cases");
         }
     }
 }

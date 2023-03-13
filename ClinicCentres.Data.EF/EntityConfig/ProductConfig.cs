@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClinicCentres.Core.DomainEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClinicCentres.Core.DomainEntities
+namespace ClinicCentres.Data.EF
 {
     internal class ProductConfig : IEntityTypeConfiguration<Product>
     {
@@ -15,6 +16,7 @@ namespace ClinicCentres.Core.DomainEntities
             builder.Property(p => p.Price).IsRequired();
             builder.Property(p => p.Name).IsRequired().HasMaxLength(500);
             builder.Property(p => p.Cost).IsRequired();
+            builder.ToTable("Products");
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClinicCentres.Core.DomainEntities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ClinicCentres.Core.DomainEntities
+
+namespace ClinicCentres.Data.EF
 {
     internal class CommentConfig : IEntityTypeConfiguration<Comment>
     {
@@ -15,6 +14,7 @@ namespace ClinicCentres.Core.DomainEntities
             builder.Property(c => c.Description).IsRequired().HasMaxLength(1000);
             builder.Property(c => c.DateTime).IsRequired();
             builder.HasMany(c => c.Replies).WithOne().HasForeignKey(c => c.ParentId);
+            builder.ToTable("Comments");
         }
     }
 }
