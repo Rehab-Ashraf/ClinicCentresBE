@@ -4,14 +4,16 @@ using ClinicCentres.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicCentres.Data.EF.Migrations
 {
     [DbContext(typeof(ClinicCentresDbContext))]
-    partial class ClinicCentresDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315163253_appointment-case-id-nullable")]
+    partial class appointmentcaseidnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace ClinicCentres.Data.EF.Migrations
                     b.Property<int?>("CaseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DayTime")
+                    b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
@@ -37,6 +39,9 @@ namespace ClinicCentres.Data.EF.Migrations
 
                     b.Property<bool>("IsBooked")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -87,11 +92,10 @@ namespace ClinicCentres.Data.EF.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("PhoneNumber");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

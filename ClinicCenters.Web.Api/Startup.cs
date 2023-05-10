@@ -1,13 +1,21 @@
 using Autofac;
 using ClinicCenters.Web.Api.Bootstrapper;
+using ClinicCentres.Core.DomainEntities;
 using ClinicCentres.Data.EF;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace ClinicCenters.Web.Api
 {
@@ -21,69 +29,150 @@ namespace ClinicCenters.Web.Api
 
         public IConfiguration Configuration { get; }
         private readonly IWebHostEnvironment _env;
-        private readonly string _portalFeAllowSpecificOrigins = "portal_fe";
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("ClinicCentresDbConnection");
 
-            services.AddControllers();
+            services.AddDbContext<ClinicCentresDbContext>(options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
+            services.AddControllers(options => options.Filters.Add(new AuthorizeFilter()));
+            services.AddIdentity<User, IdentityRole>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["IdentitySettings:Issuer"],
+                        ValidAudience = Configuration["IdentitySettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["IdentitySettings:SecurityKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AddBranch", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddBranch"));
+                options.AddPolicy("AddCategory", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddCategory"));
+                options.AddPolicy("AddProduct", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddProduct"));
+                options.AddPolicy("UpdateCategory", policy
+                    => policy.RequireClaim(claimType: "Granted", "UpdateCategory"));
+                options.AddPolicy("UpdateProduct", policy
+                    => policy.RequireClaim(claimType: "Granted", "UpdateProduct"));
+                options.AddPolicy("GetAllCategory", policy
+                    => policy.RequireClaim(claimType: "Granted", "GetAllCategory"));
+                options.AddPolicy("GetAllProduct", policy
+                    => policy.RequireClaim(claimType: "Granted", "GetAllProduct"));
+                options.AddPolicy("RequireSuperAdminRole",
+                 policy => policy.RequireRole("SuperAdmin"));
+                        options.AddPolicy("RequireAdminRole",
+                 policy => policy.RequireRole("Admin"));
+                        options.AddPolicy("RequireUserRole",
+                 policy => policy.RequireRole("User"));
+                options.AddPolicy("AllCases", policy
+                    => policy.RequireClaim(claimType: "Granted", "AllCases"));
+                options.AddPolicy("AddAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddAppointment"));
+                options.AddPolicy("UpdateAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "UpdateAppointment"));
+                options.AddPolicy("UpdateAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "UpdateAppointment"));
+                options.AddPolicy("DeleteAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteAppointment"));
+                options.AddPolicy("DeleteCase", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteCase"));
+
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("*");
-                                      builder.AllowAnyOrigin();
-                                      builder.AllowAnyHeader();
-                                      builder.AllowAnyMethod();
+                                    builder =>
+                                    {
+                                        builder.WithOrigins("*");
+                                        builder.AllowAnyOrigin();
+                                        builder.AllowAnyHeader();
+                                        builder.AllowAnyMethod();
 
-                                  });
+                                    });
             });
-            if (!_env.IsDevelopment())
-            {
-                //TODO: <Startup> | Init to use CORS, but need to revamp.
-                services.AddCors(options =>
-                {
-                    var allowedOrigins = Configuration.GetSection("AllowedOrigin").Get<string[]>();
-                    options.AddPolicy(_portalFeAllowSpecificOrigins,
-                    builder =>
-                    {
-                        builder.WithOrigins(allowedOrigins)
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
-                    });
-                });
-            }
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clinic Centers Web Api", Version = "v1" });
-            });
-            services.AddDbContext<ClinicCentresDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("ClinicCentresDbConnection"));
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Clinic Centers",
+                    Description = "Clinic Centers - APIs documentation ",
+                    TermsOfService = null,
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Clinic Centers Team.",
+                        Email = "rehabashraf063@gmail.com",
+                        Url = new Uri("http://c-systems.com")
+                    }
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"."
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+              {
+                  {
+                        new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                          Array.Empty<string>()
+                  }
+              });
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClinicCenters.Web.Api v1"));
             }
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClinicCenters.Web.Api v1"));
 
             app.UseHttpsRedirection();
-
             app.UseCors(MyAllowSpecificOrigins);
-
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

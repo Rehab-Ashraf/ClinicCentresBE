@@ -13,9 +13,10 @@ namespace ClinicCentres.Data.EF
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
-            builder.Property(p => p.Phone).IsRequired().HasMaxLength(100);
+            builder.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(100).HasColumnName("PhoneNumber");
             builder.Property(c => c.DateOfBirth).IsRequired();
             builder.Property(p => p.Email).HasMaxLength(100);
+            builder.Property(a => a.IsActive).IsRequired();
             builder.ToTable("Cases");
         }
     }

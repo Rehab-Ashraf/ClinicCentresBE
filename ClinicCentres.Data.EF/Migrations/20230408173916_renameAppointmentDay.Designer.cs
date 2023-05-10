@@ -4,14 +4,16 @@ using ClinicCentres.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicCentres.Data.EF.Migrations
 {
     [DbContext(typeof(ClinicCentresDbContext))]
-    partial class ClinicCentresDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230408173916_renameAppointmentDay")]
+    partial class renameAppointmentDay
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

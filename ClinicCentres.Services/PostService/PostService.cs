@@ -1,5 +1,5 @@
 ﻿using ClinicCentres.Core.DomainEntities;
-using ClinicCentres.Repostories.PostRepostory;
+using ClinicCentres.Repostories.PostRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

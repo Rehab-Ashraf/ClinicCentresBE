@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ClinicCentres.Repostories.BranchRepostory
+namespace ClinicCentres.Repostories.BranchRepository
 {
-    public interface IBranchRepostory
+    public interface IBranchRepository
     {
         Task<List<Branch>> GetAllBranches();
         Task<int> AddEditBranch(Branch branch);

@@ -1,16 +1,28 @@
 ﻿using Autofac;
 using AutoMapper;
 using ClinicCentres.Data.EF;
-using ClinicCentres.Repostories.BranchRepostory;
+using ClinicCentres.Repostories.AppointmentRepository;
+using ClinicCentres.Repostories.BranchRepository;
+using ClinicCentres.Repostories.CaseRepository;
+using ClinicCentres.Repostories.UserRepository;
+using ClinicCentres.Services.AppointmentService;
 using ClinicCentres.Services.BranchService;
+using ClinicCentres.Services.CaseService;
+using ClinicCentres.Services.UserService;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
 namespace ClinicCenters.Web.Api.Bootstrapper
 {
-    public class DependencyResolver : Module
+    public class DependencyResolver : Module, IDesignTimeDbContextFactory<ClinicCentresDbContext>
     {
+        public DependencyResolver()
+        {
+
+        }
         private readonly IWebHostEnvironment _env;
         public IConfiguration Configuration { get; set; }
         public DependencyResolver(IWebHostEnvironment env)
@@ -34,6 +46,9 @@ namespace ClinicCenters.Web.Api.Bootstrapper
             LoadMappers(builder);
             LoadDbContexts(builder);
             LoadBranches(builder);
+            LoadAppointments(builder);
+            LoadCases(builder);
+            LoadUseres(builder);
         }
         private void LoadMappers(ContainerBuilder builder)
         {
@@ -53,9 +68,42 @@ namespace ClinicCenters.Web.Api.Bootstrapper
         private void LoadBranches(ContainerBuilder builder)
         {
             //register service
-            builder.RegisterType<BranchService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<BranchService>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
             //register repository
-            builder.RegisterType<BranchRepostory>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<BranchRepository>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+        }
+
+        private void LoadAppointments(ContainerBuilder builder)
+        {
+            builder.RegisterType<AppointmentService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<AppointmentRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
+        }
+        private void LoadCases(ContainerBuilder builder)
+        {
+            builder.RegisterType<CasesService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<CasesRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
+        }
+        private void LoadUseres(ContainerBuilder builder)
+        {
+            builder.RegisterType<UserService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<UserRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
+        }
+
+        public ClinicCentresDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+            var connectionString = configuration.GetConnectionString("ClinicCentresDbConnection");
+
+            var builder = new DbContextOptionsBuilder<ClinicCentresDbContext>();
+
+            builder.UseSqlServer(connectionString);
+
+            return new ClinicCentresDbContext(builder.Options);
         }
     }
 }

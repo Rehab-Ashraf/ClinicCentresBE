@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicCentres.Models.Branches
+namespace ClinicCentres.Models.Cases
 {
-    public class BranchModel
+    public class CaseBasicDetails
     {
         public int Id { get; set; }
-        public string Description { get; set; }
-
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
