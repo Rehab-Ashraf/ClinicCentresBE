@@ -3,6 +3,7 @@ using ClinicCentres.Core.DomainEntities;
 using ClinicCentres.Models;
 using ClinicCentres.Models.Branches;
 using ClinicCentres.Services.BranchService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ClinicCentres.Web.Api.BranchContainer
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BranchController : ControllerBase
@@ -23,6 +25,7 @@ namespace ClinicCentres.Web.Api.BranchContainer
             this.mapper = mapper;
         }
 
+        [Authorize(Policy = ("AddBranch"))]
         [HttpPost]
         public async Task<IActionResult> AddBranch(BranchModel branch)
         {
@@ -30,7 +33,7 @@ namespace ClinicCentres.Web.Api.BranchContainer
             var result = await branchService.AddEditBranch(branchModel);
             return Ok(result);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllBranches()
         {
@@ -39,7 +42,7 @@ namespace ClinicCentres.Web.Api.BranchContainer
             return Ok(ResponseResult.SucceededWithData(countryModel));
         }
 
-
+        [Authorize(Policy = ("RequireSuperAdminRole"))]
         [HttpDelete]
         public async Task<IActionResult> DeleteBranch(int id)
         {

@@ -3,7 +3,7 @@ using ClinicCentres.Core.DomainEntities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ClinicCentres.Repostories.PostRepostory
+namespace ClinicCentres.Repostories.PostRepository
 {
     public interface IPostRepository
     {

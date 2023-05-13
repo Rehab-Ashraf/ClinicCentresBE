@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicCentres.Models.Branches
+namespace ClinicCentres.Models.Appointments
 {
-    public class BranchModel
+    public class AppointmentInputModel
     {
         public int Id { get; set; }
-        public string Description { get; set; }
-
+        public DateTime DayTime { get; set; }
+        public int? CaseId { get; set; }
     }
 }

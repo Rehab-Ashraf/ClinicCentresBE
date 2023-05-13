@@ -1,19 +1,17 @@
 ﻿using ClinicCentres.Core.DomainEntities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ClinicCentres.Data.EF;
 
-namespace ClinicCentres.Repostories.BranchRepostory
+namespace ClinicCentres.Repostories.BranchRepository
 {
-    public class BranchRepostory : IBranchRepostory
+    public class BranchRepository : IBranchRepository
     {
         private readonly ClinicCentresDbContext _clinicCentresDbContext;
 
-        public BranchRepostory(ClinicCentresDbContext clinicCentresDbContext)
+        public BranchRepository(ClinicCentresDbContext clinicCentresDbContext)
         {
             _clinicCentresDbContext = clinicCentresDbContext;
         }

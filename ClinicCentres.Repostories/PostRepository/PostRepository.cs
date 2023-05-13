@@ -4,10 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicCentres.Repostories.PostRepostory
+namespace ClinicCentres.Repostories.PostRepository
 {
     public class PostRepository : IPostRepository
     {

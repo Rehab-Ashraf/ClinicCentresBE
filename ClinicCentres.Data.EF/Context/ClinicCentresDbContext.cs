@@ -14,6 +14,8 @@ namespace ClinicCentres.Data.EF
         public DbSet<Category> Categories { get; private set; }
         public DbSet<Post> Posts { get; private set; }
         public DbSet<Branch> Branches { get; private set; }
+        public DbSet<Case> Cases { get; private set; }
+        public DbSet<Appointment> Appointments  { get; private set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfig())

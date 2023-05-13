@@ -1,5 +1,5 @@
 ﻿using ClinicCentres.Core.DomainEntities;
-using ClinicCentres.Repostories.BranchRepostory;
+using ClinicCentres.Repostories.BranchRepository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,30 +7,30 @@ namespace ClinicCentres.Services.BranchService
 {
     public class BranchService : IBranchService
     {
-        private readonly IBranchRepostory branchRepostory;
+        private readonly IBranchRepository branchRepository;
 
-        public BranchService(IBranchRepostory branchRepostory)
+        public BranchService(IBranchRepository branchRepository)
         {
-            this.branchRepostory = branchRepostory;
+            this.branchRepository = branchRepository;
         }
         public async Task<int> AddEditBranch(Branch branch)
         {
-            return await branchRepostory.AddEditBranch(branch);
+            return await branchRepository.AddEditBranch(branch);
         }
 
         public async Task<List<Branch>> GetAllBranches()
         {
-            return await branchRepostory.GetAllBranches();
+            return await branchRepository.GetAllBranches();
         }
 
         public async Task<Branch> GetBranchById(int id)
         {
-            return await branchRepostory.GetBranchById(id);
+            return await branchRepository.GetBranchById(id);
         }
 
         public async Task<bool> DeleteBranchById(int id)
         {
-            return await branchRepostory.DeleteBranchById(id);
+            return await branchRepository.DeleteBranchById(id);
         }
     }
 }
