@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ClinicCentres.Web.Api.CustomerContainer
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CaseController : ControllerBase
@@ -23,8 +24,8 @@ namespace ClinicCentres.Web.Api.CustomerContainer
             this.mapper = mapper;
         }
 
-        [Authorize(Policy = "AllCases")]
         [HttpGet]
+        [Authorize(Policy = "AllCases")]
         public async Task<IActionResult> GetAllCases()
         {
             var cases = await caseService.GetAllCases();
@@ -32,8 +33,8 @@ namespace ClinicCentres.Web.Api.CustomerContainer
             return Ok(ResponseResult.SucceededWithData(caseModel));
         }
 
-        [Authorize(Policy = "AllCases")]
         [HttpGet]
+        [Authorize(Policy = "AllCases")]
         [Route("GetAllCasesBasicDetails")]
         public async Task<IActionResult> GetAllCasesBasicDetails()
         {
@@ -42,8 +43,8 @@ namespace ClinicCentres.Web.Api.CustomerContainer
             return Ok(ResponseResult.SucceededWithData(caseModel));
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> AddEditCase(CasesModel casemodel)
         {
             var caseModel = mapper.Map<Case>(casemodel);
@@ -55,8 +56,8 @@ namespace ClinicCentres.Web.Api.CustomerContainer
             return Ok(ResponseResult.SucceededWithData(result));
         }
 
-        [Authorize(Policy = "DeleteCase")]
         [HttpDelete]
+        [Authorize(Policy = "DeleteCase")]
         public async Task<IActionResult> DeleteCase(int id)
         {
             var result = await caseService.DeleteCaseById(id);

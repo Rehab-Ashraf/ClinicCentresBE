@@ -67,38 +67,35 @@ namespace ClinicCenters.Web.Api
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AddBranch", policy
-                    => policy.RequireClaim(claimType: "Granted", "AddBranch"));
-                options.AddPolicy("AddCategory", policy
-                    => policy.RequireClaim(claimType: "Granted", "AddCategory"));
-                options.AddPolicy("AddProduct", policy
-                    => policy.RequireClaim(claimType: "Granted", "AddProduct"));
-                options.AddPolicy("UpdateCategory", policy
-                    => policy.RequireClaim(claimType: "Granted", "UpdateCategory"));
-                options.AddPolicy("UpdateProduct", policy
-                    => policy.RequireClaim(claimType: "Granted", "UpdateProduct"));
-                options.AddPolicy("GetAllCategory", policy
-                    => policy.RequireClaim(claimType: "Granted", "GetAllCategory"));
-                options.AddPolicy("GetAllProduct", policy
-                    => policy.RequireClaim(claimType: "Granted", "GetAllProduct"));
                 options.AddPolicy("RequireSuperAdminRole",
                  policy => policy.RequireRole("SuperAdmin"));
-                        options.AddPolicy("RequireAdminRole",
+                options.AddPolicy("RequireAdminRole",
                  policy => policy.RequireRole("Admin"));
-                        options.AddPolicy("RequireUserRole",
+                options.AddPolicy("RequireUserRole",
                  policy => policy.RequireRole("User"));
+
+                options.AddPolicy("AddBranch", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddBranch"));
+                options.AddPolicy("DeleteBranch", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteAppointment"));
+
+                options.AddPolicy("AddCategory", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddCategory"));
+                options.AddPolicy("DeleteCategory", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteCategory"));
+
+                options.AddPolicy("AddProduct", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddProduct"));
+                
                 options.AddPolicy("AllCases", policy
                     => policy.RequireClaim(claimType: "Granted", "AllCases"));
-                options.AddPolicy("AddAppointment", policy
-                    => policy.RequireClaim(claimType: "Granted", "AddAppointment"));
-                options.AddPolicy("UpdateAppointment", policy
-                    => policy.RequireClaim(claimType: "Granted", "UpdateAppointment"));
-                options.AddPolicy("UpdateAppointment", policy
-                    => policy.RequireClaim(claimType: "Granted", "UpdateAppointment"));
-                options.AddPolicy("DeleteAppointment", policy
-                    => policy.RequireClaim(claimType: "Granted", "DeleteAppointment"));
                 options.AddPolicy("DeleteCase", policy
                     => policy.RequireClaim(claimType: "Granted", "DeleteCase"));
+
+                options.AddPolicy("AddAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddAppointment"));
+                options.AddPolicy("DeleteAppointment", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteAppointment"));
 
             });
             services.AddCors(options =>

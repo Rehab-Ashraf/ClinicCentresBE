@@ -25,16 +25,17 @@ namespace ClinicCentres.Web.Api.BranchContainer
             this.mapper = mapper;
         }
 
-        [Authorize(Policy = ("AddBranch"))]
         [HttpPost]
+        [Authorize(Policy = ("AddBranch"))]
         public async Task<IActionResult> AddBranch(BranchModel branch)
         {
             var branchModel = mapper.Map<Branch>(branch);
             var result = await branchService.AddEditBranch(branchModel);
             return Ok(result);
         }
-        [AllowAnonymous]
+        
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllBranches()
         {
             var branches = await branchService.GetAllBranches();
@@ -42,8 +43,8 @@ namespace ClinicCentres.Web.Api.BranchContainer
             return Ok(ResponseResult.SucceededWithData(countryModel));
         }
 
-        [Authorize(Policy = ("RequireSuperAdminRole"))]
         [HttpDelete]
+        [Authorize(Policy = ("DeleteBranch"))]
         public async Task<IActionResult> DeleteBranch(int id)
         {
             var result =  await branchService.DeleteBranchById(id);
