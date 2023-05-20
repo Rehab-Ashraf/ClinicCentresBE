@@ -4,10 +4,12 @@ using ClinicCentres.Data.EF;
 using ClinicCentres.Repostories.AppointmentRepository;
 using ClinicCentres.Repostories.BranchRepository;
 using ClinicCentres.Repostories.CaseRepository;
+using ClinicCentres.Repostories.CategoryRepository;
 using ClinicCentres.Repostories.UserRepository;
 using ClinicCentres.Services.AppointmentService;
 using ClinicCentres.Services.BranchService;
 using ClinicCentres.Services.CaseService;
+using ClinicCentres.Services.CategoryService;
 using ClinicCentres.Services.UserService;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +51,19 @@ namespace ClinicCenters.Web.Api.Bootstrapper
             LoadAppointments(builder);
             LoadCases(builder);
             LoadUseres(builder);
+            LoadCategories(builder);
+        }
+        public ClinicCentresDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+            var connectionString = configuration.GetConnectionString("ClinicCentresDbConnection");
+
+            var builder = new DbContextOptionsBuilder<ClinicCentresDbContext>();
+
+            builder.UseSqlServer(connectionString);
+
+            return new ClinicCentresDbContext(builder.Options);
         }
         private void LoadMappers(ContainerBuilder builder)
         {
@@ -93,17 +108,10 @@ namespace ClinicCenters.Web.Api.Bootstrapper
             builder.RegisterType<UserRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
 
-        public ClinicCentresDbContext CreateDbContext(string[] args)
+        private void LoadCategories(ContainerBuilder builder)
         {
-            var configuration = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-            var connectionString = configuration.GetConnectionString("ClinicCentresDbConnection");
-
-            var builder = new DbContextOptionsBuilder<ClinicCentresDbContext>();
-
-            builder.UseSqlServer(connectionString);
-
-            return new ClinicCentresDbContext(builder.Options);
+            builder.RegisterType<CategoryService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<CategoryRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
     }
 }

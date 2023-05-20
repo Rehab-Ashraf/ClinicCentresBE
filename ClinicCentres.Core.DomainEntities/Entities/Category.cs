@@ -13,5 +13,6 @@ namespace ClinicCentres.Core.DomainEntities
         public int? ParentId { get; set; }
         public ICollection<Category> Subcategories { get; set; }
         public ICollection<Product> Products { get; set; }
+        public bool IsActive { get; set; }
     }
 }
