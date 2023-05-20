@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ClinicCentres.Core.DomainEntities;
 using ClinicCentres.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicCentres.Web.Api.PostContainer
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase
@@ -19,16 +21,17 @@ namespace ClinicCentres.Web.Api.PostContainer
             this.postService = postService;
             this.mapper = mapper;
         }
+
         [HttpPost]
         public async Task<IActionResult> AddPostAsync(PostModel model)
         {
-
             var post = mapper.Map<Post>(model);
-
+            
             var result = await postService.AddPostAsync(post);
 
             return Ok(result);
 
         }
+        
     }
 }

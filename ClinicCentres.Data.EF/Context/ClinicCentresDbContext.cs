@@ -1,4 +1,5 @@
 ﻿using ClinicCentres.Core.DomainEntities;
+using ClinicCentres.Core.DomainEntities.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -16,6 +17,7 @@ namespace ClinicCentres.Data.EF
         public DbSet<Branch> Branches { get; private set; }
         public DbSet<Case> Cases { get; private set; }
         public DbSet<Appointment> Appointments  { get; private set; }
+        public DbSet<Image> Images { get; private set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfig())
