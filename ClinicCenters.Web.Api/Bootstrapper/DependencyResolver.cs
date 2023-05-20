@@ -5,11 +5,13 @@ using ClinicCentres.Repostories.AppointmentRepository;
 using ClinicCentres.Repostories.BranchRepository;
 using ClinicCentres.Repostories.CaseRepository;
 using ClinicCentres.Repostories.CategoryRepository;
+using ClinicCentres.Repostories.ImageRepository;
 using ClinicCentres.Repostories.UserRepository;
 using ClinicCentres.Services.AppointmentService;
 using ClinicCentres.Services.BranchService;
 using ClinicCentres.Services.CaseService;
 using ClinicCentres.Services.CategoryService;
+using ClinicCentres.Services.ImageService;
 using ClinicCentres.Services.UserService;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +54,7 @@ namespace ClinicCenters.Web.Api.Bootstrapper
             LoadCases(builder);
             LoadUseres(builder);
             LoadCategories(builder);
+            LoadImages(builder);
         }
         public ClinicCentresDbContext CreateDbContext(string[] args)
         {
@@ -112,6 +115,12 @@ namespace ClinicCenters.Web.Api.Bootstrapper
         {
             builder.RegisterType<CategoryService>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<CategoryRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
+        }
+
+        private void LoadImages(ContainerBuilder builder)
+        {
+            builder.RegisterType<ImageService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<ImageRepository>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
     }
 }

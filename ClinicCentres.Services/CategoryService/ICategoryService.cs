@@ -10,7 +10,7 @@ namespace ClinicCentres.Services.CategoryService
     public interface ICategoryService
     {
         Task<List<Category>> GetAllCategories();
-        Task<int> AddEditCategory(Category branch);
+        Task<int> AddEditCategory(Category category);
         Task<bool> DeleteCategoryById(int id);
     }
 }

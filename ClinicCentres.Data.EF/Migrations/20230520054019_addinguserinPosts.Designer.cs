@@ -4,14 +4,16 @@ using ClinicCentres.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicCentres.Data.EF.Migrations
 {
     [DbContext(typeof(ClinicCentresDbContext))]
-    partial class ClinicCentresDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230520054019_addinguserinPosts")]
+    partial class addinguserinPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,9 +115,6 @@ namespace ClinicCentres.Data.EF.Migrations
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
@@ -170,10 +169,10 @@ namespace ClinicCentres.Data.EF.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("PostId")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -231,9 +230,6 @@ namespace ClinicCentres.Data.EF.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("VideoURL")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

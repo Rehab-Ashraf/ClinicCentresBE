@@ -97,6 +97,13 @@ namespace ClinicCenters.Web.Api
                 options.AddPolicy("DeleteAppointment", policy
                     => policy.RequireClaim(claimType: "Granted", "DeleteAppointment"));
 
+                options.AddPolicy("GetImage", policy
+                    => policy.RequireClaim(claimType: "Granted", "GetImage"));
+                options.AddPolicy("DeleteImage", policy
+                    => policy.RequireClaim(claimType: "Granted", "DeleteImage"));
+                options.AddPolicy("AddImage", policy
+                    => policy.RequireClaim(claimType: "Granted", "AddImage"));
+
             });
             services.AddCors(options =>
             {
